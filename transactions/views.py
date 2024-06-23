@@ -191,6 +191,7 @@ class BalanceTransferView(TransactionCreateMixin):
     def get_initial(self):
         initial = {"transaction_type": 5}
         return initial
+    
 
     def form_valid(self, form):
         receiver_account_number = form.cleaned_data.get("receiver_account_number")
@@ -214,8 +215,24 @@ class BalanceTransferView(TransactionCreateMixin):
         
 
         if sender_account.balance >= amount:
+            
             sender_account.balance -= amount
+
+            send_email_to_user(
+            subject="Sender Mail Message",
+            user=self.request.user,
+            amount=amount,
+            template="transactions/sender_mail.html",
+            )
+
             receiver_account.balance += amount
+
+            send_email_to_user(
+            subject="Receiver Mail Message",
+            user=receiver_account.user,
+            amount=amount,
+            template="transactions/reciver_mail.html",
+            )
 
             TransactionsModel.objects.create(
                 account=sender_account,
