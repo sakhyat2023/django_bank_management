@@ -1,7 +1,7 @@
 from typing import Any
 from django import forms
 from django.db import models
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
 from django.contrib.auth.models import User
 from .constants import gender_type, account_type
 from .models import UserBankAccount, UserAddress
@@ -135,3 +135,24 @@ class UpdateUserForm(forms.ModelForm):
             user_address.save()
 
             return user
+
+class ChangeUserPasswordFrom(PasswordChangeForm):
+
+    old_password = forms.CharField(
+        label="Old password",
+        widget=forms.PasswordInput(attrs={"class": "form-control py-2"}),
+    )
+
+    new_password1 = forms.CharField(
+        label="New password",
+        widget=forms.PasswordInput(attrs={"class": "form-control py-2"}),
+    )
+
+    new_password2 = forms.CharField(
+        label="New password",
+        widget=forms.PasswordInput(attrs={"class": "form-control py-2"}),
+    )
+
+    class Meta:
+        model = User
+        fields = ["old_password", "new_password1", "new_password2"]

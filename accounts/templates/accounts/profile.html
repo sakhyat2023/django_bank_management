@@ -3,6 +3,7 @@
   <h1 class="text-center">Account No: {{request.user.account}}</h1>
   <h1>Profile</h1>
   <form action="" method="post" class="d-flex flex-column gap-3" novalidate>
+    <a href="{% url 'change_password' %}" class="btn bg-dark nav-link text-white py-2">Change Password</a>
     {% csrf_token %}
     <div class="form-group d-flex gap-3">
       <div class="w-100">
